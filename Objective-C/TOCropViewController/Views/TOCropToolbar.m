@@ -196,6 +196,63 @@
                                                                          resourceBundle,
                                                                          nil);
     [containerView addSubview:_resetButton];
+    [self applyCustomStyle];
+}
+
+- (void)applyCustomStyle {
+    self.backgroundView.backgroundColor = [UIColor whiteColor];
+    
+    self.rotateCounterclockwiseButtonHidden = YES;
+    self.rotateClockwiseButtonHidden = YES;
+    self.resetButtonHidden = YES;
+    self.clampButtonHidden = YES;
+    _doneIconButton.hidden = YES;
+    _doneTextButton.hidden = YES;
+    _cancelIconButton.hidden = YES;
+    _cancelTextButton.hidden = YES;
+    self.doneButtonHidden = YES;
+    self.cancelButtonHidden = YES;
+    
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    saveButton.frame = CGRectMake(self.bounds.size.width - 140, 1, 120, 44);
+    saveButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    [saveButton setTitle:@"Save" forState:UIControlStateNormal];
+    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    if (@available(iOS 13.0, *)) {
+        saveButton.backgroundColor = [UIColor systemIndigoColor];
+    } else {
+        saveButton.backgroundColor = [UIColor colorWithRed:0.345 green:0.337 blue:0.839 alpha:1.0];
+    }
+    saveButton.layer.cornerRadius = 8.0f;
+    saveButton.layer.masksToBounds = YES;
+    [saveButton addTarget:self
+                   action:@selector(doneTapped)
+         forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:saveButton];
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    cancelButton.frame = CGRectMake(20, 1, 120, 44);
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    if (@available(iOS 13.0, *)) {
+        [cancelButton setTitleColor:[UIColor systemIndigoColor] forState:UIControlStateNormal];
+    } else {
+        [cancelButton setTitleColor:[UIColor colorWithRed:0.345 green:0.337 blue:0.839 alpha:1.0] forState:UIControlStateNormal];
+        cancelButton.layer.borderColor = [UIColor colorWithRed:0.345 green:0.337 blue:0.839 alpha:1.0].CGColor;
+    }
+    cancelButton.backgroundColor = [UIColor whiteColor];
+    cancelButton.layer.cornerRadius = 8.0f;
+    cancelButton.layer.borderWidth = 1.0f;
+    if (@available(iOS 13.0, *)) {
+        cancelButton.layer.borderColor = [UIColor systemIndigoColor].CGColor;
+    } else {
+        [cancelButton setTitleColor:[UIColor colorWithRed:0.345 green:0.337 blue:0.839 alpha:1.0] forState:UIControlStateNormal];
+        cancelButton.layer.borderColor = [UIColor colorWithRed:0.345 green:0.337 blue:0.839 alpha:1.0].CGColor;
+    }
+    cancelButton.layer.masksToBounds = YES;
+    [cancelButton addTarget:self
+                     action:@selector(cancelTapped)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:cancelButton];
 }
 
 - (void)layoutSubviews {
@@ -419,6 +476,14 @@
         self.clampButtonTapped();
         return;
     }
+}
+
+- (void)doneTapped {
+    if (self.doneButtonTapped) self.doneButtonTapped();
+}
+
+- (void)cancelTapped {
+    if (self.cancelButtonTapped) self.cancelButtonTapped();
 }
 
 - (CGRect)clampButtonFrame {
