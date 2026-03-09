@@ -138,6 +138,7 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 
     // If we're animating onto the screen, set a flag
     // so we can manually control the status bar fade out timing
@@ -154,7 +155,7 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
         if (self.hidesNavigationBar) {
             self.navigationBarHidden = self.navigationController.navigationBarHidden;
             self.toolbarHidden = self.navigationController.toolbarHidden;
-            [self.navigationController setNavigationBarHidden:YES animated:animated];
+            [self.navigationController setNavigationBarHidden:NO animated:animated];
             [self.navigationController setToolbarHidden:YES animated:animated];
         }
 
@@ -360,7 +361,9 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
     // at the time we need it, the size of our view will be incorrect.
     // If this is the case, derive our view size from our parent view controller instead
     UIView *view = nil;
-    if (self.parentViewController == nil) {
+    if (self.navigationController != nil) {
+        view = self.view;
+    } else if (self.parentViewController == nil) {
         view = self.view;
     } else {
         view = self.parentViewController.view;
